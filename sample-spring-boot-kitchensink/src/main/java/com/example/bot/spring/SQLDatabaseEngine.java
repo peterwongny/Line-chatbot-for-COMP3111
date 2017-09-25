@@ -19,13 +19,20 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			//Write your code here
 			Connection connection = getConnection();
 			
-			PreparedStatement stmt = connection.prepareStatement("select keyword,response from keywordresponsetable");
+			PreparedStatement stmt = connection.prepareStatement("select * from keywordresponsetable");
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			while(result == null && rs.next()) {
 				if (text.toLowerCase().contains(rs.getString(1).toLowerCase())) {
-					result = rs.getString(2);
+					result = rs.getString(2) +" " + rs.getInt(3);
+					
+					//increment count
+					PreparedStatement stmt2 = connection.prepareStatement("update keywordresponsetable set num_of_hits = ? where keyword = ?");
+					stmt2.setString(2,rs.getString(1));
+					stmt2.setInt(1,rs.getInt(3)+1);
+					stmt2.executeQuery();
+					stmt2.close();
 				}
 			}
 			
