@@ -24,7 +24,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			ResultSet rs = stmt.executeQuery();
 			
 			while(result == null && rs.next()) {
-				if (text.toLowerCase().contains(rs.getString(1))) {
+				if (text.toLowerCase().contains(rs.getString(1).toLowerCase())) {
 					result = rs.getString(2);
 				}
 			}

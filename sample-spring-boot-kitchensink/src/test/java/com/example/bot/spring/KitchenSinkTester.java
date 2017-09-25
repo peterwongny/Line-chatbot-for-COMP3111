@@ -1,6 +1,5 @@
 package com.example.bot.spring;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,15 +43,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.example.bot.spring.DatabaseEngine;
 
-
 @RunWith(SpringRunner.class)
-//@SpringBootTest(classes = { KitchenSinkTester.class, DatabaseEngine.class })
+// @SpringBootTest(classes = { KitchenSinkTester.class, DatabaseEngine.class })
 @SpringBootTest(classes = { KitchenSinkTester.class, SQLDatabaseEngine.class })
 
 public class KitchenSinkTester {
 	@Autowired
 	private DatabaseEngine databaseEngine;
-	
+
 	@Test
 	public void testNotFound() throws Exception {
 		boolean thrown = false;
@@ -61,9 +59,9 @@ public class KitchenSinkTester {
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(thrown);
+		assertThat(thrown).isEqualTo(true);
 	}
-	
+
 	@Test
 	public void testFound() throws Exception {
 		boolean thrown = false;
@@ -73,10 +71,10 @@ public class KitchenSinkTester {
 		} catch (Exception e) {
 			thrown = true;
 		}
-		assertThat(!thrown);
-		assertThat(result.equals("def"));
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("def");
 	}
-	
+
 	@Test
 	public void testabc() throws Exception {
 		boolean thrown = false;
@@ -87,6 +85,18 @@ public class KitchenSinkTester {
 			thrown = true;
 		}
 		assertThat(!thrown);
-		assertThat(result.equals("def"));
+		assertThat(result).isEqualTo("def");
+	}
+	@Test
+	public void testFound2() throws Exception {
+		boolean thrown = false;
+		String result = null;
+		try {
+			result = this.databaseEngine.search("asdf I am fine");
+		} catch (Exception e) {
+			thrown = true;
+		}
+		assertThat(!thrown).isEqualTo(true);
+		assertThat(result).isEqualTo("Great!");
 	}
 }
