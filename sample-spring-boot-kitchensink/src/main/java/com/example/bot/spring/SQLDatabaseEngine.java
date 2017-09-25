@@ -5,14 +5,43 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	String search(String text) throws Exception {
-		//Write your code here
-		return null;
+		String result = null;
+		try {
+			//Write your code here
+			Connection connection = getConnection();
+			
+			PreparedStatement stmt = connection.prepareStatement("select keyword,response from keywordresponsetable");
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while(result == null && rs.next()) {
+				if (text.toLowerCase().contains(rs.getString(1))) {
+					result = rs.getString(2);
+				}
+			}
+			
+			rs.close();
+			stmt.close();
+			connection.close();
+			
+
+		
+		} catch (Exception e) {
+			log.info("connection error", e.toString());
+		}
+		if (result != null)
+			return result;
+		throw new Exception("NOT FOUND");
+
 	}
 	
 	
